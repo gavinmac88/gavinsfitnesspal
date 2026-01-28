@@ -1,0 +1,159 @@
+:root{
+  --bg:#0b0c10;
+  --card:#151823;
+  --text:#e7e9f0;
+  --muted:#9aa3b2;
+  --btn:#2a3350;
+  --accent:#4f7cff;
+  --danger:#ff4f6d;
+}
+
+*{
+  box-sizing:border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+}
+
+body{ margin:0; background:var(--bg); color:var(--text); }
+.topbar{
+  padding:16px;
+  border-bottom:1px solid #23283a;
+  position:sticky;
+  top:0;
+  background:rgba(11,12,16,.95);
+  backdrop-filter: blur(8px);
+}
+.container{ max-width:720px; margin:0 auto; padding:16px; }
+
+h1{ margin:0; font-size:20px; }
+h2{ margin:0; font-size:18px; }
+
+.tabs{ display:flex; gap:8px; margin-bottom:16px; }
+.tab{
+  flex:1;
+  padding:10px 8px;
+  border:1px solid #23283a;
+  background:transparent;
+  color:var(--text);
+  border-radius:12px;
+}
+.tab.active{ background:var(--btn); border-color:#2f3650; }
+
+.panel{ display:none; }
+.panel.active{ display:block; }
+
+.card{
+  background:var(--card);
+  border:1px solid #23283a;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.right{ text-align:right; }
+
+.label{ color:var(--muted); font-size:12px; }
+.big{ font-size:22px; font-weight:700; margin-top:4px; }
+.totals{ margin-top:12px; }
+
+.actions{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+
+button{
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid #2f3650;
+  background:var(--btn);
+  color:var(--text);
+  cursor:pointer;
+}
+button.ghost{ background:transparent; }
+
+.input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid #2f3650;
+  background:#0f1220;
+  color:var(--text);
+  margin-top:8px;
+}
+
+.field span{ display:block; color:var(--muted); font-size:12px; }
+
+.list{ display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+.item{
+  padding:12px;
+  border:1px solid #23283a;
+  border-radius:14px;
+  background:#101425;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.item .title{ font-weight:700; }
+.item .sub{ color:var(--muted); font-size:12px; margin-top:3px; }
+
+.muted{ color:var(--muted); margin:10px 0 0; }
+.small{ font-size:12px; }
+
+.backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.hidden{ display:none; }
+
+.modal{
+  width:100%;
+  max-width:520px;
+  background:var(--card);
+  border:1px solid #23283a;
+  border-radius:16px;
+  padding:14px;
+}
+
+/* ---------- NEW: modal body spacing + better iPhone scrolling ---------- */
+#modalBody{
+  margin-top:10px;
+  max-height:70vh;
+  overflow:auto;
+  padding-right:2px;
+}
+
+/* ---------- NEW: barcode scanner container tweaks ---------- */
+#qr-reader{
+  border:1px solid #23283a;
+  border-radius:14px;
+  background:#0f1220;
+}
+
+/* Helps the scanner “video” fit nicely */
+#qr-reader video{
+  width:100% !important;
+  height:auto !important;
+}
+
+/* ---------- NEW: make long rows wrap better in History + foods ---------- */
+.item .title, .item .sub{
+  word-break: break-word;
+}
+
+/* ---------- Danger card ---------- */
+.danger{ border-color: rgba(255,79,109,.35); }
+.dangerBtn{ background: transparent; border-color: rgba(255,79,109,.6); color: var(--danger); }
+
+a{ color:var(--accent); }
+
+.brand{
+  margin:0;
+  font-size:20px;
+  font-weight:800;
+  color:#4f7cff; /* same accent blue */
+  letter-spacing:0.5px;
+}
+

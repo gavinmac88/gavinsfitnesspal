@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calorie Tracker</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+   <h1 class="brand">GavinsFitnesspal</h1> 
+  </header>
+
+  <main class="container">
+    <nav class="tabs">
+      <button class="tab active" data-tab="today">Today</button>
+      <button class="tab" data-tab="history">History</button>
+      <button class="tab" data-tab="foods">Foods</button>
+      <button class="tab" data-tab="templates">Templates</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </nav>
+
+    <!-- TODAY -->
+    <section id="tab-today" class="panel active">
+      <div class="card">
+        <div class="row">
+          <div>
+            <div class="label">Today</div>
+            <div id="todayDate" class="big"></div>
+          </div>
+          <div class="right">
+            <div class="label">Goal</div>
+            <div id="goalDisplay" class="big"></div>
+          </div>
+        </div>
+
+        <div class="row totals">
+          <div>
+            <div class="label">Calories</div>
+            <div id="calTotal" class="big"></div>
+          </div>
+          <div class="right">
+            <div class="label">Remaining</div>
+            <div id="calRemaining" class="big"></div>
+          </div>
+        </div>
+
+        <div class="row totals">
+          <div>
+            <div class="label">Protein</div>
+            <div id="pTotal" class="big"></div>
+          </div>
+          <div class="right">
+            <div class="label">Protein remaining</div>
+            <div id="pRemaining" class="big"></div>
+          </div>
+        </div>
+
+        <div class="row totals">
+          <div>
+            <div class="label">Carbs</div>
+            <div id="cTotal" class="big"></div>
+          </div>
+          <div class="right">
+            <div class="label"></div>
+            <div class="big"></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btnScanBarcode">📷 Scan Barcode</button>
+          <button id="btnAddFoodToToday">+ Add Food</button>
+          <button id="btnQuickAdd">+ Quick Add</button>
+          <button id="btnAddTemplateToToday">+ Add Template</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Entries</h2>
+        <div id="entriesList" class="list"></div>
+        <div id="emptyEntries" class="muted">No entries yet.</div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="tab-history" class="panel">
+      <div class="card">
+        <h2>History</h2>
+        <div id="historyList" class="list"></div>
+        <div id="emptyHistory" class="muted">No days logged yet.</div>
+      </div>
+    </section>
+
+    <!-- FOODS -->
+    <section id="tab-foods" class="panel">
+      <div class="card">
+        <div class="row">
+          <h2>Foods</h2>
+          <button id="btnNewFood">+ New</button>
+        </div>
+        <input id="foodSearch" class="input" placeholder="Search foods..." />
+        <div id="foodsList" class="list"></div>
+        <div id="emptyFoods" class="muted">No foods yet. Add your first one.</div>
+      </div>
+    </section>
+
+    <!-- TEMPLATES -->
+    <section id="tab-templates" class="panel">
+      <div class="card">
+        <div class="row">
+          <h2>Templates</h2>
+          <button id="btnNewTemplate">+ New</button>
+        </div>
+        <div id="templatesList" class="list"></div>
+        <div id="emptyTemplates" class="muted">No templates yet. Make “Breakfast”, “Lunch”, etc.</div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="panel">
+      <div class="card">
+        <h2>Settings</h2>
+
+        <label class="field">
+          <span>Daily calorie goal</span>
+          <input id="goalInput" type="number" class="input" min="0" step="1" placeholder="e.g., 3200" />
+        </label>
+
+        <label class="field">
+          <span>Daily protein goal (grams)</span>
+          <input id="proteinGoalInput" type="number" class="input" min="0" step="1" placeholder="e.g., 180" />
+        </label>
+
+        <button id="btnSaveSettings">Save</button>
+
+        <p class="muted small">
+          Everything is stored locally on your phone/computer. No accounts. No servers.
+        </p>
+      </div>
+
+      <div class="card danger">
+        <h2>Reset</h2>
+        <p class="muted small">This will delete foods, entries, templates, and settings on this device.</p>
+        <button id="btnReset" class="dangerBtn">Delete all data</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div id="modalBackdrop" class="backdrop hidden">
+    <div class="modal">
+      <div class="row">
+        <h3 id="modalTitle">Modal</h3>
+        <button id="modalClose" class="ghost">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Barcode scanning library (must load BEFORE app.js) -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="app.js"></script>
+</body>
+</html>
