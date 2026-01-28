@@ -8,8 +8,8 @@ function loadDB(){
   return {
     settings: { goal: 0, proteinGoal: 0 },
     foods: [],
-    templates: [],
-    templateItems: [], // {id, templateId, foodId, servings}
+    Meals: [],
+    MealsItems: [], // {id, MealsId, foodId, servings}
     entries: [] // {id, dateKey, type: "food"|"quick", foodId?, servings?, quickCalories?, ts}
   };
 }
@@ -58,7 +58,7 @@ function renderAll(){
   renderToday(db);
   renderHistory(db);     // NEW (daily log) — only runs if History panel exists
   renderFoods(db);
-  renderTemplates(db);
+  renderMeals(db);
   renderSettings(db);
 }
 
@@ -173,15 +173,15 @@ function renderFoods(db){
   });
 }
 
-function renderTemplates(db){
-  const list = $("#templatesList");
+function renderMeals(db){
+  const list = $("#MealsList");
   if(!list) return;
 
   list.innerHTML = "";
-  if($("#emptyTemplates")) $("#emptyTemplates").style.display = db.templates.length ? "none" : "block";
+  if($("#emptyMeals")) $("#emptyMeals").style.display = db.Meals.length ? "none" : "block";
 
-  db.templates.forEach(t=>{
-    const items = db.templateItems.filter(i=>i.templateId===t.id);
+  db.Meals.forEach(t=>{
+    const items = db.MealsItems.filter(i=>i.MealsId===t.id);
     const cal = Math.round(items.reduce((sum, it)=>{
       const food = db.foods.find(f=>f.id===it.foodId);
       return sum + (food?.caloriesPerServing||0) * (it.servings||1);
@@ -204,10 +204,10 @@ function renderTemplates(db){
 
   list.querySelectorAll("[data-use]").forEach(btn=>{
     btn.addEventListener("click", ()=>{
-      const templateId = btn.getAttribute("data-use");
+      const MealsId = btn.getAttribute("data-use");
       const db2 = loadDB();
       const dk = todayKey();
-      const items = db2.templateItems.filter(i=>i.templateId===templateId);
+      const items = db2.MealsItems.filter(i=>i.MealsId===MealsId);
 
       items.forEach(it=>{
         db2.entries.push({
@@ -228,8 +228,8 @@ function renderTemplates(db){
 
   list.querySelectorAll("[data-edit]").forEach(btn=>{
     btn.addEventListener("click", ()=>{
-      const templateId = btn.getAttribute("data-edit");
-      openEditTemplateModal(templateId);
+      const MealsId = btn.getAttribute("data-edit");
+      openEditMealsModal(MealsId);
     });
   });
 }
@@ -383,8 +383,8 @@ if($("#btnReset")){
 if($("#btnNewFood")) $("#btnNewFood").addEventListener("click", openNewFoodModal);
 if($("#btnAddFoodToToday")) $("#btnAddFoodToToday").addEventListener("click", ()=> openPickFoodModal("Add Food"));
 if($("#btnQuickAdd")) $("#btnQuickAdd").addEventListener("click", openQuickAddModal);
-if($("#btnNewTemplate")) $("#btnNewTemplate").addEventListener("click", openNewTemplateModal);
-if($("#btnAddTemplateToToday")) $("#btnAddTemplateToToday").addEventListener("click", openPickTemplateModal);
+if($("#btnNewMeals")) $("#btnNewMeals").addEventListener("click", openNewMealsModal);
+if($("#btnAddMealsToToday")) $("#btnAddMealsToToday").addEventListener("click", openPickMealsModal);
 
 // NEW: barcode scan button (only works if you add <button id="btnScanBarcode">)
 if($("#btnScanBarcode")) $("#btnScanBarcode").addEventListener("click", openScanBarcodeModal);
@@ -570,10 +570,10 @@ function openQuickAddModal(){
   openModal("Quick Add", wrap);
 }
 
-function openNewTemplateModal(){
+function openNewMealsModal(){
   const wrap = document.createElement("div");
   wrap.innerHTML = `
-    <label class="field"><span>Template name</span><input class="input" id="t_name" placeholder="e.g., Breakfast"/></label>
+    <label class="field"><span>Meals name</span><input class="input" id="t_name" placeholder="e.g., Breakfast"/></label>
     <div class="actions" style="margin-top:12px;">
       <button id="t_save">Create</button>
       <button class="ghost" id="t_cancel">Cancel</button>
@@ -584,23 +584,23 @@ function openNewTemplateModal(){
     const name = wrap.querySelector("#t_name").value.trim();
     if(!name) return alert("Name required.");
     const db = loadDB();
-    db.templates.push({ id: uid(), name });
+    db.Meals.push({ id: uid(), name });
     saveDB(db);
     closeModal();
     renderAll();
   });
-  openModal("New Template", wrap);
+  openModal("New Meal", wrap);
 }
 
-function openEditTemplateModal(templateId){
+function openEditMealodal(MealsId){
   const db = loadDB();
-  const t = db.templates.find(x=>x.id===templateId);
+  const t = db.Meals.find(x=>x.id===mealsId);
   if(!t) return;
 
   const wrap = document.createElement("div");
   const title = document.createElement("div");
   title.className = "muted";
-  title.textContent = "Add foods to this template:";
+  title.textContent = "Add foods to this Meals:";
   wrap.appendChild(title);
 
   // picker
@@ -633,7 +633,7 @@ function openEditTemplateModal(templateId){
 
   function redraw(){
     const db2 = loadDB();
-    const items = db2.templateItems.filter(i=>i.templateId===templateId);
+    const items = db2.MealsItems.filter(i=>i.MealsId===MealsId);
     list.innerHTML = "";
     items.forEach(it=>{
       const food = db2.foods.find(f=>f.id===it.foodId);
@@ -655,7 +655,7 @@ function openEditTemplateModal(templateId){
       btn.addEventListener("click", ()=>{
         const id = btn.getAttribute("data-del");
         const db3 = loadDB();
-        db3.templateItems = db3.templateItems.filter(x=>x.id!==id);
+        db3.MealsItems = db3.MealsItems.filter(x=>x.id!==id);
         saveDB(db3);
         redraw();
         renderAll();
@@ -666,9 +666,9 @@ function openEditTemplateModal(templateId){
   addBtn.addEventListener("click", ()=>{
     const db2 = loadDB();
     if(db2.foods.length===0) return alert("Add foods first.");
-    db2.templateItems.push({
+    db2.MealsItems.push({
       id: uid(),
-      templateId,
+      MealsId,
       foodId: select.value,
       servings: Math.max(0, parseFloat(servings.value||"1"))
     });
@@ -688,21 +688,21 @@ function openEditTemplateModal(templateId){
   openModal(`Edit: ${t.name}`, wrap);
 }
 
-function openPickTemplateModal(){
+function openPickMealsModal(){
   const db = loadDB();
-  if(db.templates.length===0) return alert("Create a template first.");
+  if(db.Meals.length===0) return alert("Create a Meal first.");
 
   const wrap = document.createElement("div");
   const select = document.createElement("select");
   select.className = "input";
-  db.templates.forEach(t=>{
+  db.Meals.forEach(t=>{
     const opt = document.createElement("option");
     opt.value = t.id;
     opt.textContent = t.name;
     select.appendChild(opt);
   });
 
-  wrap.appendChild(labelWrap("Template", select));
+  wrap.appendChild(labelWrap("Meals", select));
 
   const actions = document.createElement("div");
   actions.className = "actions";
@@ -712,9 +712,9 @@ function openPickTemplateModal(){
 
   actions.querySelector("#cancel").addEventListener("click", closeModal);
   actions.querySelector("#ok").addEventListener("click", ()=>{
-    const templateId = select.value;
+    const MealsId = select.value;
     const db2 = loadDB();
-    const items = db2.templateItems.filter(i=>i.templateId===templateId);
+    const items = db2.MealsItems.filter(i=>i.MealsId===MealsId);
     items.forEach(it=>{
       db2.entries.push({ id: uid(), dateKey: todayKey(), type:"food", foodId: it.foodId, servings: it.servings || 1, ts: Date.now() });
     });
@@ -723,7 +723,7 @@ function openPickTemplateModal(){
     renderAll();
   });
 
-  openModal("Add Template", wrap);
+  openModal("Add Meals", wrap);
 }
 
 // ---------- Barcode scanning + Open Food Facts (FREE) ----------
